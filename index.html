@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TOEIC 800 學習系統</title>
+<style>
+ body {
+   background: #ffffff;
+   color: #0033cc;
+   font-family: Arial, sans-serif;
+   line-height: 1.6;
+   margin: 0;
+   padding: 0;
+ }
+ header {
+   text-align: center;
+   padding: 20px;
+   border-bottom: 2px solid #0033cc;
+ }
+ h1, h2 {
+   color: #0033cc;
+ }
+ .unit-container {
+   max-width: 900px;
+   margin: 20px auto;
+   padding: 10px;
+ }
+ .unit {
+   border: 1px solid #0033cc;
+   padding: 15px;
+   margin-bottom: 20px;
+   border-radius: 10px;
+ }
+ .accordion {
+   background: white;
+   color: #0033cc;
+   cursor: pointer;
+   padding: 10px;
+   width: 100%;
+   border: 1px solid #0033cc;
+   border-radius: 6px;
+   text-align: left;
+   font-size: 16px;
+   margin-top: 10px;
+ }
+ .panel {
+   padding: 10px;
+   display: none;
+   border-left: 3px solid #0033cc;
+   margin-bottom: 10px;
+ }
+ .vocab-card {
+   border: 1px solid #0033cc;
+   padding: 10px;
+   border-radius: 8px;
+   margin-bottom: 10px;
+ }
+ button.quiz-option {
+   display: block;
+   padding: 8px;
+   margin: 5px 0;
+   width: 100%;
+   border: 1px solid #0033cc;
+   background: white;
+   color: #0033cc;
+   border-radius: 6px;
+   cursor: pointer;
+ }
+ .skill-section {
+   margin-top: 20px;
+   padding: 10px;
+   border: 1px solid #0033cc;
+   border-radius: 10px;
+ }
+ audio, textarea, input {
+   width: 100%;
+   margin: 5px 0;
+   border: 1px solid #0033cc;
+   border-radius: 6px;
+   padding: 6px;
+ }
+</style>
+</head>
+<body>
+<header>
+  <h1>TOEIC 800 靜態網頁學習系統</h1>
+  <p>五大單元：聽說讀寫整合學習</p>
+</header>
+<div class="unit-container">
+
+  <!-- UNIT TEMPLATE START -->
+  <div class="unit">
+    <h2>Unit 1 - 商務書信 Business Emails</h2>
+
+    <button class="accordion">重點內容</button>
+    <div class="panel">
+      <p>常見書信架構、禮貌用語、TOEIC 常見句型。</p>
+    </div>
+
+    <h3>單字卡</h3>
+    <div class="vocab-card">inquire — 詢問</div>
+    <div class="vocab-card">confirm — 確認</div>
+    <div class="vocab-card">arrangement — 安排</div>
+
+    <h3>小測驗</h3>
+    <button class="quiz-option">I would like to ___ about your service. (A) inquire (B) invite</button>
+  </div>
+  <!-- UNIT TEMPLATE END -->
+
+  <div class="unit">
+    <h2>Unit 2 - 會議 Meeting English</h2>
+    <button class="accordion">重點內容</button>
+    <div class="panel">
+      <p>會議相關詞彙、主持句型、記錄語句。</p>
+    </div>
+  </div>
+
+  <div class="unit">
+    <h2>Unit 3 - 電話英文 Telephone English</h2>
+    <button class="accordion">重點內容</button>
+    <div class="panel">
+      <p>接聽、轉接、留言、TOEIC 聽力常見口語。</p>
+    </div>
+  </div>
+
+  <div class="unit">
+    <h2>Unit 4 - 閱讀理解 Reading Skills</h2>
+    <button class="accordion">閱讀技巧</button>
+    <div class="panel"><p>略讀 skimming、尋讀 scanning、TOEIC 閱讀題型。</p></div>
+  </div>
+
+  <div class="unit">
+    <h2>Unit 5 - 寫作 Writing Skills</h2>
+    <button class="accordion">寫作重點</button>
+    <div class="panel"><p>段落結構、主題句、常見商務文句。</p></div>
+  </div>
+
+  <!-- Skills Section -->
+  <div class="skill-section">
+    <h2>聽 Listening</h2>
+    <audio controls>
+      <source src="sample_audio.mp3" type="audio/mpeg" />
+    </audio>
+
+    <h2>說 Speaking</h2>
+    <textarea placeholder="請模仿聽到的句子並自行朗讀（無錄音功能）"></textarea>
+
+    <h2>讀 Reading</h2>
+    <p>閱讀以下短文並回答問題：</p>
+    <p>The meeting has been rescheduled to Friday due to a conflict.</p>
+
+    <h2>寫 Writing</h2>
+    <textarea placeholder="請寫一封50字英文Email"></textarea>
+  </div>
+
+</div>
+
+<script>
+var acc = document.getElementsByClassName("accordion");
+for (let i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function () {
+    var panel = this.nextElementSibling;
+    panel.style.display = panel.style.display === "block" ? "none" : "block";
+  });
+}
+</script>
+</body>
+</html>
