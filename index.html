@@ -1,169 +1,769 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>TOEIC 800 學習系統</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>TOEIC 800 靜態網頁教材 — 範例課程</title>
 <style>
- body {
-   background: #ffffff;
-   color: #0033cc;
-   font-family: Arial, sans-serif;
-   line-height: 1.6;
-   margin: 0;
-   padding: 0;
- }
- header {
-   text-align: center;
-   padding: 20px;
-   border-bottom: 2px solid #0033cc;
- }
- h1, h2 {
-   color: #0033cc;
- }
- .unit-container {
-   max-width: 900px;
-   margin: 20px auto;
-   padding: 10px;
- }
- .unit {
-   border: 1px solid #0033cc;
-   padding: 15px;
-   margin-bottom: 20px;
-   border-radius: 10px;
- }
- .accordion {
-   background: white;
-   color: #0033cc;
-   cursor: pointer;
-   padding: 10px;
-   width: 100%;
-   border: 1px solid #0033cc;
-   border-radius: 6px;
-   text-align: left;
-   font-size: 16px;
-   margin-top: 10px;
- }
- .panel {
-   padding: 10px;
-   display: none;
-   border-left: 3px solid #0033cc;
-   margin-bottom: 10px;
- }
- .vocab-card {
-   border: 1px solid #0033cc;
-   padding: 10px;
-   border-radius: 8px;
-   margin-bottom: 10px;
- }
- button.quiz-option {
-   display: block;
-   padding: 8px;
-   margin: 5px 0;
-   width: 100%;
-   border: 1px solid #0033cc;
-   background: white;
-   color: #0033cc;
-   border-radius: 6px;
-   cursor: pointer;
- }
- .skill-section {
-   margin-top: 20px;
-   padding: 10px;
-   border: 1px solid #0033cc;
-   border-radius: 10px;
- }
- audio, textarea, input {
-   width: 100%;
-   margin: 5px 0;
-   border: 1px solid #0033cc;
-   border-radius: 6px;
-   padding: 6px;
- }
+  :root{
+    --bg:#0f1724;
+    --card:#0b1220;
+    --muted:#94a3b8;
+    --accent:#06b6d4;
+    --glass: rgba(255,255,255,0.03);
+    --success:#10b981;
+    --danger:#ef4444;
+    --glass-2: rgba(255,255,255,0.02);
+    font-family: "Noto Sans TC", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:
+      linear-gradient(180deg, rgba(6,182,212,0.06) 0%, rgba(15,23,36,0) 40%),
+      var(--bg);
+    color:#e6eef8;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    padding:28px;
+  }
+
+  .container{
+    max-width:1100px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns: 1fr 380px;
+    gap:24px;
+    align-items:start;
+  }
+
+  header{
+    grid-column:1/-1;
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:6px;
+  }
+  .logo{
+    width:68px;
+    height:68px;
+    border-radius:12px;
+    background:linear-gradient(135deg,var(--accent),#7c3aed);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    font-size:18px;
+    color:#021023;
+    box-shadow:0 8px 30px rgba(2,6,23,0.6);
+  }
+  h1{font-size:20px;margin:0}
+  p.lead{margin:0;color:var(--muted);font-size:13px}
+
+  main.card{
+    background:linear-gradient(180deg,var(--card), rgba(8,12,20,0.7));
+    padding:20px;
+    border-radius:12px;
+    box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+    border:1px solid rgba(255,255,255,0.03);
+    overflow:hidden;
+  }
+
+  aside.card{
+    padding:18px;
+    border-radius:12px;
+    background:linear-gradient(180deg,var(--card), var(--glass-2));
+    border:1px solid rgba(255,255,255,0.03);
+    box-shadow:0 6px 22px rgba(2,6,23,0.5);
+  }
+
+  .section-title{
+    display:flex;align-items:center;gap:12px;margin-bottom:12px;
+  }
+  .topic{
+    font-weight:700;font-size:16px;
+  }
+  .meta{
+    color:var(--muted);font-size:13px;
+  }
+
+  /* Accordion */
+  .accordion{
+    margin-top:8px;
+  }
+  .accordion-item{
+    border-radius:10px;
+    overflow:hidden;
+    margin-bottom:10px;
+    border:1px solid rgba(255,255,255,0.03);
+    background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+  }
+  .acc-head{
+    display:flex;
+    justify-content:space-between;
+    padding:12px 14px;
+    cursor:pointer;
+    align-items:center;
+  }
+  .acc-head h3{margin:0;font-size:14px}
+  .acc-body{
+    padding:12px 14px;
+    border-top:1px solid rgba(255,255,255,0.02);
+    display:none;
+    font-size:14px;
+    color:#d9e8f5;
+    line-height:1.6;
+  }
+
+  /* Vocab Cards */
+  .vocab-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+    margin-top:10px;
+  }
+  .vocab{
+    background:var(--glass);
+    padding:10px;
+    border-radius:10px;
+    position:relative;
+    min-height:80px;
+  }
+  .vocab .word{font-weight:700;font-size:15px}
+  .vocab .pos{color:var(--muted);font-size:12px;margin-bottom:6px}
+  .vocab .def{display:none;color:#d6eefc;font-size:13px}
+  .vocab .toggle{
+    position:absolute;right:8px;top:8px;background:rgba(255,255,255,0.02);
+    border:0;padding:6px;border-radius:8px;color:var(--muted);cursor:pointer;font-size:12px;
+  }
+
+  /* Sentence blocks */
+  .sentence{
+    background:rgba(255,255,255,0.02);
+    padding:10px;border-radius:8px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:flex-start;
+  }
+  .sentence .eng{font-weight:600}
+  .sentence .copy{
+    background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);padding:6px 8px;border-radius:8px;cursor:pointer;font-size:13px;
+  }
+
+  /* Quiz */
+  .quiz{
+    margin-top:12px;
+  }
+  .mcq{margin-bottom:12px;padding:12px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border:1px solid rgba(255,255,255,0.02)}
+  .mcq p{margin:0 0 8px 0}
+  label.option{display:block;background:rgba(255,255,255,0.01);padding:8px;border-radius:8px;margin-bottom:6px;cursor:pointer;border:1px solid rgba(255,255,255,0.02)}
+  input[type="radio"], input[type="checkbox"]{margin-right:10px}
+
+  .btn{
+    display:inline-block;padding:8px 12px;border-radius:8px;border:0;background:var(--accent);color:#012;cursor:pointer;font-weight:700;
+    box-shadow:0 6px 18px rgba(6,182,212,0.12);
+  }
+  .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted);box-shadow:none}
+  .btn.small{padding:6px 8px;font-size:13px}
+
+  /* Progress */
+  .progress-wrap{background:rgba(255,255,255,0.03);padding:8px;border-radius:10px;margin-bottom:14px}
+  .progress{
+    width:100%;height:12px;background:rgba(255,255,255,0.03);border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,0.02)
+  }
+  .progress > i{
+    display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--accent),#7c3aed);transition:width 400ms ease;
+  }
+  .progress-label{font-size:13px;color:var(--muted);margin-top:6px}
+
+  /* Right column */
+  .sticky{
+    position:sticky;top:28px;
+  }
+  .score{
+    font-size:20px;font-weight:800;color:var(--accent);
+  }
+  .answer-key{
+    margin-top:10px;background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;font-size:14px;color:#dfeeff;
+  }
+
+  footer{
+    grid-column:1/-1;margin-top:18px;color:var(--muted);font-size:13px;text-align:center;
+  }
+
+  /* responsive */
+  @media (max-width:980px){
+    .container{grid-template-columns:1fr; padding:0 12px}
+    aside.card{order:2}
+  }
+
+  /* small helpers */
+  .muted{color:var(--muted);font-size:13px}
+  .mt12{margin-top:12px}
+  .mb6{margin-bottom:6px}
+  .kbd{font-family:monospace;background:#031123;padding:3px 6px;border-radius:6px;border:1px solid rgba(255,255,255,0.02);font-size:12px}
 </style>
 </head>
 <body>
-<header>
-  <h1>TOEIC 800 靜態網頁學習系統</h1>
-  <p>五大單元：聽說讀寫整合學習</p>
-</header>
-<div class="unit-container">
+<div class="container" role="main">
+  <header>
+    <div class="logo">TOEIC</div>
+    <div>
+      <h1>TOEIC 800 專攻：商務書信與閱讀策略</h1>
+      <p class="lead">靜態教材示範頁 — 目標：TOEIC 800。包含重點說明、字彙卡、句型、情境例句、小測與互動元件。</p>
+    </div>
+  </header>
 
-  <!-- UNIT TEMPLATE START -->
-  <div class="unit">
-    <h2>Unit 1 - 商務書信 Business Emails</h2>
-
-    <button class="accordion">重點內容</button>
-    <div class="panel">
-      <p>常見書信架構、禮貌用語、TOEIC 常見句型。</p>
+  <!-- MAIN CONTENT -->
+  <main class="card" aria-labelledby="main-title">
+    <div class="section-title">
+      <div>
+        <div class="topic" id="main-title">主題：商務書信 (Business Correspondence)</div>
+        <div class="meta">內容：常見書信句型、商業字彙、閱讀技巧、實戰練習</div>
+      </div>
+      <div style="margin-left:auto;text-align:right;">
+        <div class="muted">學習目標：達到 TOEIC 800 準備</div>
+        <div class="muted">適合程度：中高級 (B1–B2)</div>
+      </div>
     </div>
 
-    <h3>單字卡</h3>
-    <div class="vocab-card">inquire — 詢問</div>
-    <div class="vocab-card">confirm — 確認</div>
-    <div class="vocab-card">arrangement — 安排</div>
+    <!-- Intro -->
+    <section aria-labelledby="intro" class="mt12">
+      <h2 id="intro" style="margin:0 0 8px 0">導入說明</h2>
+      <p style="margin:0;color:#dbeefd;line-height:1.7">
+        商務書信（包括電子郵件、詢價、投訴回覆、會議邀請）常出現在 TOEIC 的閱讀與聽力情境。
+        本單元將教授高頻字彙、關鍵句型、以及閱讀快速解題技巧（掃讀/尋讀），並提供練習題以量化學習成效。
+      </p>
+    </section>
 
-    <h3>小測驗</h3>
-    <button class="quiz-option">I would like to ___ about your service. (A) inquire (B) invite</button>
-  </div>
-  <!-- UNIT TEMPLATE END -->
+    <!-- Accordion with main topics -->
+    <div class="accordion" id="main-accordion" aria-hidden="false">
+      <div class="accordion-item">
+        <div class="acc-head" tabindex="0">
+          <h3>TOEIC 常見考點與閱讀技巧</h3>
+          <div class="muted">點擊展開</div>
+        </div>
+        <div class="acc-body">
+          <ul>
+            <li><strong>掃讀 (Skimming)</strong>：找出段落主要大意，適用於第一題型與速讀情境。</li>
+            <li><strong>尋讀 (Scanning)</strong>：針對特定資訊（數字、日期、名詞）快速定位答案。</li>
+            <li><strong>語篇連貫性</strong>：注意連接詞（however, therefore, moreover）以判斷段落邏輯。</li>
+            <li><strong>文體判斷</strong>：信件/通知/廣告的格式不同，先判斷文本類型再答題。</li>
+          </ul>
+        </div>
+      </div>
 
-  <div class="unit">
-    <h2>Unit 2 - 會議 Meeting English</h2>
-    <button class="accordion">重點內容</button>
-    <div class="panel">
-      <p>會議相關詞彙、主持句型、記錄語句。</p>
+      <div class="accordion-item">
+        <div class="acc-head" tabindex="0">
+          <h3>重點策略：時間管理與猜題技巧</h3>
+          <div class="muted">點擊展開</div>
+        </div>
+        <div class="acc-body">
+          <ol>
+            <li>閱讀題：先看題目選項再讀文章（逆向掃描）。</li>
+            <li>段落題：找到主旨句通常位於開頭或結尾。</li>
+            <li>若遇不確定的單字，先定位句子結構與上下文推斷，不要在單字上耗太多時間。</li>
+          </ol>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <div class="unit">
-    <h2>Unit 3 - 電話英文 Telephone English</h2>
-    <button class="accordion">重點內容</button>
-    <div class="panel">
-      <p>接聽、轉接、留言、TOEIC 聽力常見口語。</p>
+    <!-- Vocabulary -->
+    <section class="mt12" aria-labelledby="vocab-title">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <h2 id="vocab-title" style="margin:0 0 8px 0;">必備單字（Top 12）</h2>
+        <div class="muted">點按卡片顯示解釋</div>
+      </div>
+      <div class="vocab-grid" id="vocab-grid">
+        <!-- Each vocab card -->
+        <div class="vocab" data-word="invoice">
+          <div class="word">invoice</div>
+          <div class="pos">n.</div>
+          <div class="def">發票；帳單 — a bill for goods or services provided</div>
+          <button class="toggle" aria-label="Toggle definition">顯示</button>
+        </div>
+
+        <div class="vocab" data-word="purchase">
+          <div class="word">purchase</div>
+          <div class="pos">v./n.</div>
+          <div class="def">購買、採購 — to buy; something that is bought</div>
+          <button class="toggle" aria-label="Toggle definition">顯示</button>
+        </div>
+
+        <div class="vocab" data-word="invoice">
+          <div class="word">receipt</div>
+          <div class="pos">n.</div>
+          <div class="def">收據 — proof of a transaction or payment</div>
+          <button class="toggle" aria-label="Toggle definition">顯示</button>
+        </div>
+
+        <div class="vocab" data-word="discrepancy">
+          <div class="word">discrepancy</div>
+          <div class="pos">n.</div>
+          <div class="def">差異、不符 — an inconsistency or difference between facts</div>
+          <button class="toggle" aria-label="Toggle definition">顯示</button>
+        </div>
+
+        <div class="vocab" data-word="deadline">
+          <div class="word">deadline</div>
+          <div class="pos">n.</div>
+          <div class="def">截止期限 — the latest time by which something must be done</div>
+          <button class="toggle" aria-label="Toggle definition">顯示</button>
+        </div>
+
+        <div class="vocab" data-word="confirm">
+          <div class="word">confirm</div>
+          <div class="pos">v.</div>
+          <div class="def">確認 — to verify or make certain</div>
+          <button class="toggle" aria-label="Toggle definition">顯示</button>
+        </div>
+
+        <div class="vocab" data-word="enclose">
+          <div class="word">enclose</div>
+          <div class="pos">v.</div>
+          <div class="def">隨信附上 — to include with a letter or package</div>
+          <button class="toggle" aria-label="Toggle definition">顯示</button>
+        </div>
+
+        <div class="vocab" data-word="acknowledge">
+          <div class="word">acknowledge</div>
+          <div class="pos">v.</div>
+          <div class="def">確認收到／承認 — to confirm receipt or accept</div>
+          <button class="toggle" aria-label="Toggle definition">顯示</button>
+        </div>
+
+        <div class="vocab" data-word="negotiate">
+          <div class="word">negotiate</div>
+          <div class="pos">v.</div>
+          <div class="def">談判 — to discuss terms to reach agreement</div>
+          <button class="toggle" aria-label="Toggle definition">顯示</button>
+        </div>
+
+        <div class="vocab" data-word="outstanding">
+          <div class="word">outstanding</div>
+          <div class="pos">adj.</div>
+          <div class="def">未支付的；傑出的 — unpaid; exceptionally good</div>
+          <button class="toggle" aria-label="Toggle definition">顯示</button>
+        </div>
+
+        <div class="vocab" data-word="attachment">
+          <div class="word">attachment</div>
+          <div class="pos">n.</div>
+          <div class="def">附件 — a file sent along with an email</div>
+          <button class="toggle" aria-label="Toggle definition">顯示</button>
+        </div>
+
+        <div class="vocab" data-word="inquiry">
+          <div class="word">inquiry</div>
+          <div class="pos">n.</div>
+          <div class="def">詢問 — a question or request for information</div>
+          <button class="toggle" aria-label="Toggle definition">顯示</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sentence patterns -->
+    <section class="mt12" aria-labelledby="pattern-title">
+      <h2 id="pattern-title" style="margin:0 0 8px 0">必背句型（Top 6）</h2>
+      <div class="muted mb6">點選右側 Copy 可快速複製句型到剪貼簿</div>
+
+      <div class="sentence">
+        <div>
+          <div class="eng">1. Please find the attached <em>document/invoice</em> for your reference.</div>
+          <div class="muted" style="margin-top:6px">用途：附檔提醒（信件常用）</div>
+        </div>
+        <button class="copy" data-copy="Please find the attached document for your reference.">Copy</button>
+      </div>
+
+      <div class="sentence">
+        <div>
+          <div class="eng">2. We regret to inform you that your order has been delayed due to shipping issues.</div>
+          <div class="muted" style="margin-top:6px">用途：通知延遲</div>
+        </div>
+        <button class="copy" data-copy="We regret to inform you that your order has been delayed due to shipping issues.">Copy</button>
+      </div>
+
+      <div class="sentence">
+        <div>
+          <div class="eng">3. Could you please confirm receipt of this email and the enclosed files?</div>
+          <div class="muted" style="margin-top:6px">用途：確認收件</div>
+        </div>
+        <button class="copy" data-copy="Could you please confirm receipt of this email and the enclosed files?">Copy</button>
+      </div>
+
+      <div class="sentence">
+        <div>
+          <div class="eng">4. We would like to schedule a meeting to discuss the proposal next week.</div>
+          <div class="muted" style="margin-top:6px">用途：安排會議</div>
+        </div>
+        <button class="copy" data-copy="We would like to schedule a meeting to discuss the proposal next week.">Copy</button>
+      </div>
+
+      <div class="sentence">
+        <div>
+          <div class="eng">5. Please advise if you require any further assistance regarding this matter.</div>
+          <div class="muted" style="margin-top:6px">用途：結尾客套</div>
+        </div>
+        <button class="copy" data-copy="Please advise if you require any further assistance regarding this matter.">Copy</button>
+      </div>
+
+      <div class="sentence">
+        <div>
+          <div class="eng">6. We appreciate your prompt attention to this request.</div>
+          <div class="muted" style="margin-top:6px">用途：要求迅速處理</div>
+        </div>
+        <button class="copy" data-copy="We appreciate your prompt attention to this request.">Copy</button>
+      </div>
+    </section>
+
+    <!-- Business examples -->
+    <section class="mt12" aria-labelledby="examples-title">
+      <h2 id="examples-title" style="margin:0 0 8px 0">商務情境例句（英文 + 中文翻譯）</h2>
+      <div class="sentence" style="flex-direction:column;align-items:flex-start">
+        <div style="margin-bottom:6px">
+          <div class="eng">Example: The attached invoice shows the outstanding balance of $1,200 due by the end of the month.</div>
+          <div class="muted" style="margin-top:6px">翻譯：附上的發票顯示本月月底前需付清的未付款餘額為 1,200 美元。</div>
+        </div>
+        <button class="copy" data-copy="The attached invoice shows the outstanding balance of $1,200 due by the end of the month.">Copy</button>
+      </div>
+
+      <div class="sentence" style="flex-direction:column;align-items:flex-start">
+        <div style="margin-bottom:6px">
+          <div class="eng">Example: Please acknowledge receipt of the shipment and notify us if there are any discrepancies.</div>
+          <div class="muted" style="margin-top:6px">翻譯：請確認收貨並告知若有任何不符之處。</div>
+        </div>
+        <button class="copy" data-copy="Please acknowledge receipt of the shipment and notify us if there are any discrepancies.">Copy</button>
+      </div>
+    </section>
+
+    <!-- Quiz -->
+    <section class="mt12" aria-labelledby="quiz-title">
+      <h2 id="quiz-title" style="margin:0 0 8px 0">小測驗區</h2>
+      <div class="muted">包含單選、填空、閱讀理解。完成後按 <span class="kbd">評分</span> 查看結果並更新進度。</div>
+
+      <div class="quiz" id="quiz">
+        <!-- MCQ 1 -->
+        <div class="mcq" data-answer="B">
+          <p><strong>1.</strong> Which sentence is most appropriate when sending an invoice?</p>
+          <label class="option"><input type="radio" name="q1" value="A"> A. I will pick up the invoice tomorrow.</label>
+          <label class="option"><input type="radio" name="q1" value="B"> B. Please find the attached invoice for your payment.</label>
+          <label class="option"><input type="radio" name="q1" value="C"> C. We are late because of the invoice.</label>
+        </div>
+
+        <!-- MCQ 2 -->
+        <div class="mcq" data-answer="A">
+          <p><strong>2.</strong> The word "outstanding" in "outstanding balance" most closely means:</p>
+          <label class="option"><input type="radio" name="q2" value="A"> A. unpaid</label>
+          <label class="option"><input type="radio" name="q2" value="B"> B. excellent</label>
+          <label class="option"><input type="radio" name="q2" value="C"> C. completed</label>
+        </div>
+
+        <!-- Fill in the blank 3 -->
+        <div class="mcq" data-answer="confirm">
+          <p><strong>3. 填空</strong>：請填入最適合的單字完成句子 — "Could you please ______ receipt of this email?"</p>
+          <input type="text" id="q3" placeholder="在此輸入" style="width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit">
+        </div>
+
+        <!-- Reading passage -->
+        <div class="mcq" data-answer='["B","A","C"]'>
+          <p><strong>閱讀段落</strong>（請先閱讀短文，再回答問題）</p>
+          <div style="background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;margin-bottom:8px">
+            <small class="muted">To: Purchasing Dept.<br>Subject: Delivery Confirmation</small>
+            <p style="margin:8px 0 0 0;line-height:1.6;color:#dfeeff">
+              We are writing to confirm that the shipment of model X-200 was delivered on April 6.
+              Please inspect the items and report any discrepancies within three business days.
+              If everything is in order, kindly proceed with payment according to the terms stated on the invoice.
+            </p>
+          </div>
+
+          <p><strong>4.</strong> When should discrepancies be reported?</p>
+          <label class="option"><input type="radio" name="q4" value="A"> Within one business day</label>
+          <label class="option"><input type="radio" name="q4" value="B"> Within three business days</label>
+          <label class="option"><input type="radio" name="q4" value="C"> Within one month</label>
+
+          <p style="margin-top:8px"><strong>5.</strong> The phrase "If everything is in order" most likely means:</p>
+          <label class="option"><input type="radio" name="q5" value="A"> If the items are damaged</label>
+          <label class="option"><input type="radio" name="q5" value="B"> If the items match the order</label>
+          <label class="option"><input type="radio" name="q5" value="C"> If the invoice is missing</label>
+
+          <p style="margin-top:8px"><strong>6.</strong> What is the next action requested if items are OK?</p>
+          <label class="option"><input type="radio" name="q6" value="A"> Schedule a new shipment</label>
+          <label class="option"><input type="radio" name="q6" value="B"> Return the items</label>
+          <label class="option"><input type="radio" name="q6" value="C"> Proceed with payment</label>
+        </div>
+
+        <div style="display:flex;gap:10px;margin-top:10px;align-items:center">
+          <button id="gradeBtn" class="btn">評分</button>
+          <button id="showAnswers" class="btn ghost">顯示答案</button>
+          <div id="result" class="muted" style="margin-left:auto">尚未評分</div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- RIGHT COLUMN: interactive widgets -->
+  <aside class="card sticky" aria-labelledby="side-title">
+    <div class="section-title" style="margin-bottom:8px">
+      <div>
+        <div class="topic" id="side-title">學習互動面板</div>
+        <div class="meta">Progress & Tools</div>
+      </div>
     </div>
-  </div>
 
-  <div class="unit">
-    <h2>Unit 4 - 閱讀理解 Reading Skills</h2>
-    <button class="accordion">閱讀技巧</button>
-    <div class="panel"><p>略讀 skimming、尋讀 scanning、TOEIC 閱讀題型。</p></div>
-  </div>
+    <div class="progress-wrap" aria-hidden="false">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div class="muted">完成進度</div>
+        <div id="percent" class="muted">0%</div>
+      </div>
+      <div class="progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" role="progressbar">
+        <i id="bar"></i>
+      </div>
+      <div class="progress-label">建議：完成小測與複製三個句型以獲得最大效益</div>
+    </div>
 
-  <div class="unit">
-    <h2>Unit 5 - 寫作 Writing Skills</h2>
-    <button class="accordion">寫作重點</button>
-    <div class="panel"><p>段落結構、主題句、常見商務文句。</p></div>
-  </div>
+    <div style="margin-top:12px">
+      <div class="muted mb6">快速工具</div>
+      <button id="toggleAllDefs" class="btn small" style="width:100%;margin-bottom:8px">全部顯示解釋</button>
+      <button id="clearSelections" class="btn ghost small" style="width:100%;margin-bottom:8px">重設小測選項</button>
 
-  <!-- Skills Section -->
-  <div class="skill-section">
-    <h2>聽 Listening</h2>
-    <audio controls>
-      <source src="sample_audio.mp3" type="audio/mpeg" />
-    </audio>
+      <div style="margin-top:10px">
+        <div class="muted">目前得分</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+          <div>
+            <div class="score" id="scoreText">—</div>
+            <div class="muted" style="font-size:13px">（評分後顯示）</div>
+          </div>
+          <div style="width:72px">
+            <img src="" alt="" style="width:72px;height:72px;border-radius:10px;display:block;background:linear-gradient(135deg,var(--accent),#7c3aed)">
+          </div>
+        </div>
+      </div>
 
-    <h2>說 Speaking</h2>
-    <textarea placeholder="請模仿聽到的句子並自行朗讀（無錄音功能）"></textarea>
+      <div class="answer-key mt12">
+        <strong>答案鍵 (快速參考)</strong>
+        <div style="margin-top:8px">
+          <div>1: B</div>
+          <div>2: A</div>
+          <div>3: confirm</div>
+          <div>4: B | 5: B | 6: C</div>
+        </div>
+      </div>
+    </div>
 
-    <h2>讀 Reading</h2>
-    <p>閱讀以下短文並回答問題：</p>
-    <p>The meeting has been rescheduled to Friday due to a conflict.</p>
+  </aside>
 
-    <h2>寫 Writing</h2>
-    <textarea placeholder="請寫一封50字英文Email"></textarea>
-  </div>
-
+  <footer>
+    <div>本頁為靜態教材範例 — 可直接複製到 HTML 檔作為課程模組使用。祝你朝 TOEIC 800 進步！</div>
+  </footer>
 </div>
 
 <script>
-var acc = document.getElementsByClassName("accordion");
-for (let i = 0; i < acc.length; i++) {
-  acc[i].addEventListener("click", function () {
-    var panel = this.nextElementSibling;
-    panel.style.display = panel.style.display === "block" ? "none" : "block";
+/* ============================
+   Interactive behaviors (全部在此檔內)
+   - Accordion toggle
+   - Vocab card toggle (show/hide definitions)
+   - Copy buttons for sentences
+   - Quiz grading and progress update
+   - Toggle all definitions and reset controls
+   ============================ */
+
+/* Utility */
+const $ = selector => document.querySelector(selector);
+const $$ = selector => Array.from(document.querySelectorAll(selector));
+
+/* ACCORDION */
+$$('.accordion-item .acc-head').forEach(head=>{
+  head.addEventListener('click', ()=> toggleAcc(head));
+  head.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleAcc(head); }});
+});
+function toggleAcc(head){
+  const body = head.nextElementSibling;
+  const open = body.style.display === 'block';
+  // close others in same accordion
+  const parent = head.closest('.accordion');
+  if(parent){
+    parent.querySelectorAll('.acc-body').forEach(b=> b.style.display = 'none');
+  }
+  body.style.display = open ? 'none' : 'block';
+}
+
+/* VOCAB CARDS */
+function setVocabToggles(){
+  $$('#vocab-grid .vocab').forEach(card=>{
+    const btn = card.querySelector('.toggle');
+    btn.addEventListener('click', ()=>{
+      const def = card.querySelector('.def');
+      const is = def.style.display === 'block';
+      def.style.display = is ? 'none' : 'block';
+      btn.textContent = is ? '顯示' : '隱藏';
+      computeProgress();
+    });
   });
 }
+setVocabToggles();
+
+/* COPY BUTTONS */
+$$('.copy').forEach(btn=>{
+  btn.addEventListener('click', async (e)=>{
+    const text = btn.dataset.copy || (btn.closest('.sentence') && btn.closest('.sentence').querySelector('.eng')?.textContent) || '';
+    try{
+      await navigator.clipboard.writeText(text);
+      btn.textContent = '已複製';
+      setTimeout(()=> btn.textContent = 'Copy',900);
+      // track progress when copying unique items
+      btn.dataset.copied = '1';
+      computeProgress();
+    }catch(err){
+      // fallback: select and copy
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      try{ document.execCommand('copy'); btn.textContent = '已複製'; setTimeout(()=> btn.textContent = 'Copy',900); }catch(e){}
+      ta.remove();
+    }
+  });
+});
+
+/* TOGGLE ALL DEFINITIONS */
+$('#toggleAllDefs').addEventListener('click', ()=>{
+  const all = $$('#vocab-grid .vocab .def');
+  const anyHidden = all.some(d => d.style.display !== 'block');
+  all.forEach(d => d.style.display = anyHidden ? 'block' : 'none');
+  $$('#vocab-grid .vocab .toggle').forEach(b => b.textContent = anyHidden ? '隱藏' : '顯示');
+  computeProgress();
+});
+
+/* CLEAR SELECTIONS */
+$('#clearSelections').addEventListener('click', ()=>{
+  // clear radios
+  $$('input[type="radio"]').forEach(r=> r.checked=false);
+  // clear q3
+  $('#q3').value = '';
+  // reset result
+  $('#result').textContent = '尚未評分';
+  $('#scoreText').textContent = '—';
+  updateProgressBar(0);
+});
+
+/* QUIZ GRADING */
+$('#gradeBtn').addEventListener('click', ()=>{
+  const results = gradeQuiz();
+  $('#result').textContent = `得分：${results.correct} / ${results.total} （${results.percent}%）`;
+  $('#scoreText').textContent = `${Math.round(results.percent)}%`;
+  updateProgressBar(results.percent);
+});
+
+/* SHOW ANSWERS */
+$('#showAnswers').addEventListener('click', ()=>{
+  // reveal by highlighting correct options
+  // MCQs: q1,q2,q4,q5,q6 and fill q3
+  const ans = {
+    q1:'B', q2:'A',
+    q4:'B', q5:'B', q6:'C',
+    q3: 'confirm'
+  };
+  ['q1','q2','q4','q5','q6'].forEach(name=>{
+    $$(`input[name="${name}"]`).forEach(r=>{
+      r.parentElement.style.border = '1px solid rgba(255,255,255,0.02)';
+      r.parentElement.style.background = 'transparent';
+      if(r.value === ans[name]) r.parentElement.style.background = 'linear-gradient(90deg, rgba(6,182,212,0.12), rgba(124,58,237,0.06))';
+    });
+  });
+  // fill answer
+  $('#q3').value = ans.q3;
+});
+
+/* GRADE LOGIC */
+function gradeQuiz(){
+  let total = 0, correct = 0;
+  // q1
+  total++;
+  const q1 = $$('input[name="q1"]').find(r=>r.checked);
+  if(q1 && q1.value === 'B') correct++;
+  // q2
+  total++;
+  const q2 = $$('input[name="q2"]').find(r=>r.checked);
+  if(q2 && q2.value === 'A') correct++;
+  // q3 (fill)
+  total++;
+  const q3 = ($('#q3').value || '').trim().toLowerCase();
+  if(q3 === 'confirm') correct++;
+  // reading q4 q5 q6
+  ['q4','q5','q6'].forEach(name=>{
+    total++;
+    const r = $$(`input[name="${name}"]`).find(i=>i.checked);
+    if(r){
+      const ans = {q4:'B', q5:'B', q6:'C'}[name];
+      if(r.value === ans) correct++;
+    }
+  });
+  const percent = Math.round((correct/total)*100);
+  return {total,correct,percent};
+}
+
+/* PROGRESS CALCULATION
+   - Measure: vocab defs revealed (12), copied sentences count (6), quiz completion percent (weighted)
+   - Normalize to 0-100
+*/
+function computeProgress(){
+  const vocabDefs = $$('#vocab-grid .vocab .def').filter(d => d.style.display === 'block').length;
+  const totalVocab = $$('#vocab-grid .vocab').length;
+
+  const copied = $$('.sentence .copy').filter(b=> b.dataset.copied === '1').length;
+  const totalCopyTargets = $$('.sentence .copy').length;
+
+  // quiz progress: number of answered items
+  const radioAnswered = $$('input[type="radio"]').filter(r=> r.checked).length;
+  const totalRadios = $$('input[type="radio"]').length;
+  // consider each group: q1,q2,q4,q5,q6 -> 5 groups, q3 -> 1
+  const quizAnsweredGroups = ['q1','q2','q4','q5','q6'].reduce((acc,name)=>{
+    return acc + ($$(`input[name="${name}"]`).some(r=>r.checked) ? 1 : 0);
+  }, 0) + (($('#q3').value || '').trim().length > 0 ? 1 : 0);
+  const quizGroupsTotal = 6;
+
+  // weights
+  const wVocab = 0.30, wCopy = 0.20, wQuiz = 0.50;
+  const sVocab = (vocabDefs/totalVocab);
+  const sCopy = (copied/totalCopyTargets);
+  const sQuiz = (quizAnsweredGroups/quizGroupsTotal);
+
+  const totalScore = Math.round((sVocab * wVocab + sCopy * wCopy + sQuiz * wQuiz) * 100);
+  updateProgressBar(totalScore);
+  return totalScore;
+}
+
+function updateProgressBar(percent){
+  const pct = Math.max(0, Math.min(100, Math.round(percent)));
+  $('#bar').style.width = pct + '%';
+  $('#percent').textContent = pct + '%';
+  $('#bar').parentElement.setAttribute('aria-valuenow', pct);
+}
+
+/* update progress on interactions */
+['click','input','change'].forEach(evt=>{
+  document.addEventListener(evt, (e)=>{
+    // throttle minor events by simple debounce
+    if(computeProgressDebounce) clearTimeout(computeProgressDebounce);
+    computeProgressDebounce = setTimeout(()=> computeProgress(), 220);
+  });
+});
+let computeProgressDebounce = null;
+
+/* initialize progress */
+computeProgress();
+
+/* small accessibility: focus outlines for keyboard users */
+document.addEventListener('keyup', (e)=>{
+  if(e.key === 'Tab') document.body.style.outline = '';
+});
+
+/* ensure initial accordion first open */
+(() => {
+  const first = document.querySelector('.accordion-item .acc-body');
+  if(first) first.style.display = 'block';
+})();
+
 </script>
 </body>
 </html>
